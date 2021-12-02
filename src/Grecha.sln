@@ -1,0 +1,51 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31912.275
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Grecha.Server", "Grecha.Server\Grecha.Server.csproj", "{0C0DE8F3-8784-4B78-A404-048FC9A9F8A5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Grecha.Client.Android", "Grecha.Client\Grecha.Client.Android\Grecha.Client.Android.csproj", "{D2E4C7CE-E780-4AF7-9C66-5682515E16EF}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Grecha.Client", "Grecha.Client\Grecha.Client\Grecha.Client.csproj", "{C5742685-1496-4268-92DC-B04CBB15F644}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Grecha.OpenCV", "Grecha.OpenCV\Grecha.OpenCV.csproj", "{1334A08F-09E6-477F-BD76-A18AE4912ADE}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{DEFFEE3F-1E3A-466F-8F3E-CEB592CB8C18}"
+	ProjectSection(SolutionItems) = preProject
+		Dockerfile = Dockerfile
+		Readme.md = Readme.md
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{0C0DE8F3-8784-4B78-A404-048FC9A9F8A5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0C0DE8F3-8784-4B78-A404-048FC9A9F8A5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0C0DE8F3-8784-4B78-A404-048FC9A9F8A5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0C0DE8F3-8784-4B78-A404-048FC9A9F8A5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D2E4C7CE-E780-4AF7-9C66-5682515E16EF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D2E4C7CE-E780-4AF7-9C66-5682515E16EF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D2E4C7CE-E780-4AF7-9C66-5682515E16EF}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{D2E4C7CE-E780-4AF7-9C66-5682515E16EF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D2E4C7CE-E780-4AF7-9C66-5682515E16EF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D2E4C7CE-E780-4AF7-9C66-5682515E16EF}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{C5742685-1496-4268-92DC-B04CBB15F644}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C5742685-1496-4268-92DC-B04CBB15F644}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C5742685-1496-4268-92DC-B04CBB15F644}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C5742685-1496-4268-92DC-B04CBB15F644}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1334A08F-09E6-477F-BD76-A18AE4912ADE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1334A08F-09E6-477F-BD76-A18AE4912ADE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1334A08F-09E6-477F-BD76-A18AE4912ADE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1334A08F-09E6-477F-BD76-A18AE4912ADE}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {E6382029-953B-4DCF-8CBE-A008D9DE2228}
+	EndGlobalSection
+EndGlobal

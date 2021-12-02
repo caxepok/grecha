@@ -1,0 +1,56 @@
+{
+  "name": "paraplan",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "@testing-library/jest-dom": "^5.11.4",
+    "@testing-library/react": "^11.1.0",
+    "@testing-library/user-event": "^12.1.10",
+    "@use-it/event-listener": "^0.1.6",
+    "date-fns": "^2.25.0",
+    "react": "^17.0.2",
+    "react-charts": "^2.0.0-beta.7",
+    "react-datepicker": "^4.3.0",
+    "react-dom": "^17.0.2",
+    "react-redux": "^7.2.5",
+    "react-router": "^5.2.1",
+    "react-router-dom": "^5.3.0",
+    "react-scripts": "4.0.3",
+    "react-tooltip": "^4.2.21",
+    "react-virtualized": "^9.22.3",
+    "react-vis": "^1.11.7",
+    "redux": "^4.1.1",
+    "redux-thunk": "^2.3.0",
+    "signalr": "^2.4.2",
+    "styled-components": "^5.3.3",
+    "uuid": "^8.3.2",
+    "web-vitals": "^1.0.1"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject"
+  },
+  "eslintConfig": {
+    "extends": [
+      "react-app",
+      "react-app/jest"
+    ]
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "devDependencies": {
+    "prettier": "^2.4.1"
+  }
+}
