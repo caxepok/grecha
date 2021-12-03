@@ -11,7 +11,7 @@ export const Process = React.memo(() => {
   const [lines, setLines] = useState(null);
   const carts = useSelector(({ process }) => process?.carts, shallowEqual);
 
-  useEffect(() => dispatch(loadCarts()), [dispatch]);
+  useEffect(() => !carts && dispatch(loadCarts()), [carts, dispatch]);
 
   useEffect(() => {
     if (carts) {
