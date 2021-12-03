@@ -37,7 +37,7 @@ export const Line = React.memo((props) => {
 
   return (
     <Layout.Card align="center" title={title}>
-      <Layout.Row sizes={["500px", 1]}>
+      <Layout.Row sizes={[5, 4]}>
         <Markup.Carts>
           <Markup.Crane>
             <CraneImage />
