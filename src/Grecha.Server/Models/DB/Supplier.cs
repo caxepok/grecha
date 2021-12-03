@@ -15,7 +15,5 @@ namespace Grecha.Server.Models.DB
         /// Название поставщика
         /// </summary>
         public string Name { get; set; }
-
-        public virtual ICollection<Cart> Carts { get; set; }
     }
 }

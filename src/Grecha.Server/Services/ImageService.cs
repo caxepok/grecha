@@ -1,9 +1,12 @@
 ﻿using Grecha.OpenCV;
+using Grecha.Server.Hubs;
 using Grecha.Server.Models.API;
 using Grecha.Server.Models.DB;
 using Grecha.Server.Services.Interfaces;
 using grechaserver.Infrastructure;
 using grechaserver.Services.Interfaces;
+using Microsoft.AspNetCore.SignalR;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using System;
@@ -20,6 +23,7 @@ namespace grechaserver.Services
         private readonly AppSettings _appSettings;
         private readonly GrechaDBContext _grechaDBContext;
         private readonly IChannelWriterService<MeasureInfo> _channelWriterService;
+        private readonly IHubContext<ClientHub> _clientHub;
 
         /// <summary>
         /// последнее изображение сверху
@@ -31,20 +35,21 @@ namespace grechaserver.Services
         private static byte[] SideImage;
 
         public ImageService(ILogger<ImageService> logger, IOptions<AppSettings> options, IChannelWriterService<MeasureInfo> channelWriterService,
-            GrechaDBContext grechaDBContext)
+            IHubContext<ClientHub> clientHub, GrechaDBContext grechaDBContext)
         {
             _logger = logger;
             _grechaDBContext = grechaDBContext;
             _channelWriterService = channelWriterService;
             _appSettings = options.Value;
+            _clientHub = clientHub;
         }
 
         public async Task ProcessImage(string side, byte[] image)
         {
             // нам нужно дождаться пока придут изображения с обоих камер
             // чтобы рассматривать их как один цельный снимок
-            // в проде такого не будет, т.к. камера будет присылать только метаданные
-            // изоражения с камер можно будет запросить on-demand
+            // в проде такого не будет, т.к. Jetson Nano на кране будет присылать только метаданные,
+            // а изоражения с камер можно будет запросить on-demand
             switch (side)
             {
                 case "up":
@@ -54,7 +59,8 @@ namespace grechaserver.Services
                     SideImage = image;
                     break;
             }
-
+            // тут же где-то должна быть проверка на то, что в кадре сейчас кран\ковш\машнит
+            // в этом случае анализ не нужно проводить, т.к. он в изображении будет мешать
             if (UpImage != null && SideImage != null)
             {
                 byte[] upImage = UpImage;
@@ -69,11 +75,12 @@ namespace grechaserver.Services
                     if (cartNumber == String.Empty)
                         return;
 
-                    var cart = _grechaDBContext.Carts.SingleOrDefault(_ => _.Number == cartNumber);
+                    var cart = _grechaDBContext.Carts.Include(_ => _.Supplier).SingleOrDefault(_ => _.Number == cartNumber);
                     if (cart == null)
                     {
                         // новый вагон, сохраним его
-                        cart = new Cart() { Number = cartNumber, Line = 2 };    // предполагаем что состав у нас на второй линии
+                        // предполагаем что у нас вагон на второй линии, и поставщик номер 1 (т.к. пока нет каталога поставщиков)
+                        cart = new Cart() { Number = cartNumber, Line = 2, SupplierId = 1 };    
                         _grechaDBContext.Add(cart);
                         await _grechaDBContext.SaveChangesAsync();
                     }
@@ -83,10 +90,15 @@ namespace grechaserver.Services
                     cart.QualityLevel = CalculateQualityLevel(quality);
                     _grechaDBContext.Add(measure);
                     await _grechaDBContext.SaveChangesAsync();
-                    // и изображение на будущее
+                    // ... и изображение на будущее
                     await StoreShotsAsync(cart.Id, measure.Id, upImage, sideImage);
+                    
+                    // шлём уведоление клиентам (фронт + планшет)
+                    var measureInfo = new MeasureInfo() { CartNumber = cartNumber, Quality = quality, CartId = cart.Id, LineNumber = cart.Line, 
+                        QualityLevel = cart.QualityLevel, MeasureId = measure.Id, Weight = 120, SupplierName = cart.Supplier.Name };
 
-                    _channelWriterService.WriteToChannel(new MeasureInfo() { CartNumber = cartNumber, Quality = quality });
+                    _channelWriterService.WriteToChannel(measureInfo);
+                    await _clientHub.Clients.All.SendAsync("Measured", measureInfo);
                 }
                 catch (Exception ex)
                 {
@@ -124,11 +136,11 @@ namespace grechaserver.Services
         /// <returns></returns>
         public int CalculateQualityLevel(int quality)
         {
-            if (quality < _appSettings.QualityGood)
+            if (quality >= _appSettings.QualityGood)
                 return 1;
-            else if (quality < _appSettings.QualityNormal)
+            else if (quality >= _appSettings.QualityNormal)
                 return 2;
-            else if (quality < _appSettings.QualityLow)
+            else if (quality >= _appSettings.QualityLow)
                 return 3;
             else return 4;
         }

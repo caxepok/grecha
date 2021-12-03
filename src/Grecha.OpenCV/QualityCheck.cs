@@ -95,9 +95,14 @@ namespace Grecha.OpenCV
             int total = size.Width * size.Height;
             int nonZero = Cv2.CountNonZero(dilated);
 
-
             int nonBlack = total - nonZero;
-            return 95;
+            
+            // вся картинка белая :) наверняка это ошибка, но считаем что сырьё 100% чистоты
+            if (total == nonBlack)
+                return 100;
+
+            // чистота сырья - отношение белых пикселей к чёрным
+            return 100 - (total / total - nonBlack);
         }
 
         /// <summary>

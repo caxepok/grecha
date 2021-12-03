@@ -10,6 +10,7 @@ namespace grechaserver.Infrastructure
     {
         public DbSet<Cart> Carts { get; set; }
         public DbSet<Measure> Measures { get; set; }
+        public DbSet<Supplier> Suppliers{ get; set; }
 
         public GrechaDBContext(DbContextOptions<GrechaDBContext> options) : base(options)
         {

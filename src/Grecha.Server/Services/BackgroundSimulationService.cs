@@ -1,10 +1,16 @@
-﻿using Grecha.Server.Models.API;
+﻿using Grecha.Server.Hubs;
+using Grecha.Server.Models.API;
+using Grecha.Server.Models.DB;
 using Grecha.Server.Services.Interfaces;
+using grechaserver.Infrastructure;
 using grechaserver.Services.Interfaces;
+using Microsoft.AspNetCore.SignalR;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using System;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -20,29 +26,35 @@ namespace Grecha.Server.Services
         private readonly ILogger _logger;
         private readonly IChannelWriterService<MeasureInfo> _channelWriterService;
         private readonly IServiceProvider _serviceProvider;
+        private readonly IHubContext<ClientHub> _clientHub;
 
-        public SimulationService(ILogger<SimulationService> logger, IServiceProvider serviceProvider, IChannelWriterService<MeasureInfo> channelWriterService)
+        public SimulationService(ILogger<SimulationService> logger, IServiceProvider serviceProvider, IChannelWriterService<MeasureInfo> channelWriterService, IHubContext<ClientHub> clientHub)
         {
             _logger = logger;
             _channelWriterService = channelWriterService;
             _serviceProvider = serviceProvider;
+            _clientHub = clientHub;
         }
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
             using var scope = _serviceProvider.CreateScope();
             var imageService  = scope.ServiceProvider.GetRequiredService<IImageService>();
+            var dbContext = scope.ServiceProvider.GetRequiredService<GrechaDBContext>();
 
+            List<Supplier> suppliers = await dbContext.Suppliers.ToListAsync();
             string cartNumber = _random.Next(10000000, 99999999).ToString();
-            int counter = 0;
+            string supplierName = suppliers[_random.Next(0, suppliers.Count)].Name;
+            int counter = 1;
 
             while (!stoppingToken.IsCancellationRequested)
             {
-                // каждые 10 измерений генерим новый вагон
-                if (counter == 5)
+                // каждые 6 измерений генерим новый виртуальный вагон
+                if (counter == 7)
                 {
                     cartNumber = _random.Next(10000000, 99999999).ToString();
-                    counter = 0;
+                    supplierName = suppliers[_random.Next(0, suppliers.Count)].Name;
+                    counter = 1;
                 }
 
                 try
@@ -52,13 +64,14 @@ namespace Grecha.Server.Services
                     {
                         CartId = 0,
                         LineNumber = 2, // симуляция работы на второй линии
+                        MeasureId = counter,
                         CartNumber = cartNumber,
                         Quality = quality,
-                        QualityLevel = imageService.CalculateQualityLevel(quality)
+                        QualityLevel = imageService.CalculateQualityLevel(quality),
+                        SupplierName = supplierName
                     };
                     _channelWriterService.WriteToChannel(measureInfo);
-                    _logger.LogInformation($"Simulation event written, cart: {measureInfo.CartNumber} quality: {measureInfo.Quality}");
-
+                    await _clientHub.Clients.All.SendAsync("Measured", measureInfo);
                 }
                 catch (Exception ex)
                 {

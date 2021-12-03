@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 namespace grechaserver.Controllers
 {
     /// <summary>
-    /// Контроллер для фронта для работы с изображениями
+    /// Контроллер для фронта\камер\планшета для работы с изображениями и данными вагонов
     /// </summary>
     [ApiController]
     [Route("[controller]")]
@@ -28,13 +28,16 @@ namespace grechaserver.Controllers
         [HttpGet("")]
         public async Task<IActionResult> GetCarts()
         {
-            return Ok(_grechaDBContext.Carts);
+            return Ok(_grechaDBContext.Carts.Include(_ => _.Supplier));
         }
 
         [HttpGet("{id}")]
         public async Task<IActionResult> GetCart(long id)
         {
-            return Ok(_grechaDBContext.Carts.Include(_ => _.Measures).SingleOrDefaultAsync(_ => _.Id == id));
+            return Ok(_grechaDBContext.Carts
+                .Include(_ => _.Measures)
+                .Include(_ => _.Supplier)
+                .SingleOrDefaultAsync(_ => _.Id == id));
         }
 
         [HttpGet("{id}/{measureId}/{side}")]

@@ -11,7 +11,11 @@ namespace Grecha.Server.Models.API
         /// <summary>
         /// Идентификатор вагона
         /// </summary>
-        public int CartId {get;set;}
+        public long CartId {get;set;}
+        /// <summary>
+        /// Идентификтаор измерения
+        /// </summary>
+        public long MeasureId {get;set;}
         /// <summary>
         /// Идентификатор линии
         /// </summary>
@@ -20,6 +24,10 @@ namespace Grecha.Server.Models.API
         /// Номер вагона
         /// </summary>
         public string CartNumber { get; set; }
+        /// <summary>
+        /// Название поставщика
+        /// </summary>
+        public string SupplierName { get; set; }
         /// <summary>
         /// Качество сырья
         /// </summary>

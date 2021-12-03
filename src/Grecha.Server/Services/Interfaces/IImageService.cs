@@ -1,5 +1,4 @@
-﻿using Grecha.Server.Models.API;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 
 namespace grechaserver.Services.Interfaces
 {
@@ -31,6 +30,10 @@ namespace grechaserver.Services.Interfaces
         /// <param name="side">место установки камеры</param>
         /// <returns></returns>
         Task<byte[]> GetShotAsync(long cartId, long measureId, string side);
+        /// <summary>
+        /// Считает уровень количества в зависимости от качества
+        /// </summary>
+        /// <param name="quality">качества</param>
         int CalculateQualityLevel(int quality);
     }
 }

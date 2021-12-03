@@ -47,6 +47,11 @@ namespace Grecha.Server.Hubs
             }
         }
 
+        internal void NotifyClients(MeasureInfo measureInfo)
+        {
+            Clients.All.SendAsync("Measured", measureInfo);
+        }
+
         public override Task OnDisconnectedAsync(Exception exception)
         {
             _channelWriterService.UnregisterConnection(Context.ConnectionId);

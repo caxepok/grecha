@@ -28,7 +28,5 @@ namespace Grecha.Server.Models.DB
         /// </summary>
         public int Weight { get;set; }
 
-        public virtual Cart Cart { get; set; }
-
     }
 }
