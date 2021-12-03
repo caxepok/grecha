@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled, { keyframes } from "styled-components";
 
 export const Carts = styled.div`
   display: flex;
@@ -8,6 +8,8 @@ export const Carts = styled.div`
   position: relative;
   margin-left: -${(p) => p.theme.spacing.xlarge};
   margin-top: -60px;
+  margin-bottom: -20px;
+  padding-bottom: 20px;
   padding-top: 100px;
   min-height: 155px;
 `;
@@ -17,7 +19,7 @@ export const Crane = styled.div`
   right: 0;
   width: 173px;
   height: 150px;
-  bottom: 15px;
+  bottom: 35px;
 
   > svg {
     width: 100%;
@@ -27,6 +29,16 @@ export const Crane = styled.div`
 
 export const Info = styled.div`
   margin-top: -36px;
+`;
+
+const fadeIn = keyframes`
+  0% {
+    opacity: 0;
+  }
+  
+  100% {
+    opacity: 1;
+  }
 `;
 
 export const Photo = styled.div`
@@ -40,5 +52,6 @@ export const Photo = styled.div`
     height: 100%;
     width: 100%;
     border-radius: ${(p) => p.theme.borderRadius.card};
+    animation: ${fadeIn} 1s;
   }
 `;

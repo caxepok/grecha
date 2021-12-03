@@ -11,9 +11,16 @@ export const Line = React.memo((props) => {
   const [isAnimated, setAnimated] = useState(false);
   const dispatch = useDispatch();
   const photo = useSelector(({ process }) => process.photos[id], shallowEqual);
+  const [images, setImages] = useState([photo]);
+
+  useEffect(() => {
+    photo && setImages((images) => [images[images.length - 1], photo]);
+  }, [photo]);
 
   useEffect(() => {
     data && setAnimated(true);
+
+    return () => setAnimated(false);
   }, [data]);
 
   const [lastCartId, lastMeasureId] = useMemo(() => {
@@ -28,18 +35,16 @@ export const Line = React.memo((props) => {
     lastMeasureId && dispatch(loadPhoto(id, lastCartId, lastMeasureId));
   }, [lastCartId, lastMeasureId, id, dispatch]);
 
-  console.log(photo);
-
   return (
     <Layout.Card align="center" title={title}>
-      <Layout.Row sizes={["500px", 1]}>
+      <Layout.Row sizes={[5, 4]}>
         <Markup.Carts>
           <Markup.Crane>
             <CraneImage />
           </Markup.Crane>
           {data && data.map((item) => <Cart key={item.number} {...item} isAnimated={isAnimated} />)}
         </Markup.Carts>
-        <Markup.Photo>{photo && <img src={photo} alt={""} height={130} />}</Markup.Photo>
+        <Markup.Photo>{images.map((image) => image && <img src={image} key={image} alt="" />)}</Markup.Photo>
       </Layout.Row>
     </Layout.Card>
   );

@@ -14,11 +14,11 @@ const flicker = keyframes`
 `;
 
 export const Wrapper = styled.span(
-  ({ theme: { typography }, hasMargin, qualityLevel }) => css`
+  ({ theme: { typography }, hasMargin, qualityLevel, isAnimated }) => css`
     min-width: 170px;
     height: 65px;
     margin-left: -5px;
-    margin-right: ${hasMargin ? -170 : 0}px;
+    margin-right: ${hasMargin ? -165 : 0}px;
     position: relative;
     transition: margin 1s;
     padding: 5px 20px 30px;
@@ -28,6 +28,7 @@ export const Wrapper = styled.span(
     fill: ${qualityColors[qualityLevel]};
 
     ${qualityLevel === 4 &&
+    isAnimated &&
     css`
       &:last-child {
         animation: ${flicker} 1s infinite;
@@ -69,4 +70,15 @@ export const Quality = styled.span`
   position: absolute;
   right: 17px;
   bottom: 17px;
+`;
+
+export const Weight = styled.span`
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -10px;
+  text-align: center;
+  z-index: 10;
+  font-weight: 700;
+  color: ${(p) => p.theme.colors.secondary};
 `;

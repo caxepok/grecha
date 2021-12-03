@@ -5,4 +5,4 @@ export const qualityColors = {
   4: "#FF4422",
 };
 
-export const API_URL = "http://atomspeech.germanywestcentral.cloudapp.azure.com";
+export const API_URL = window.config?.REACT_APP_API_URL || process.env.REACT_APP_API_URL || "";
