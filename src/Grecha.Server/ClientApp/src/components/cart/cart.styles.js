@@ -26,6 +26,7 @@ export const Wrapper = styled.span(
     font-size: ${typography.fontSize};
     line-height: ${typography.lineHeight};
     fill: ${qualityColors[qualityLevel]};
+    cursor: pointer;
 
     ${qualityLevel === 4 &&
     isAnimated &&
@@ -78,7 +79,7 @@ export const Weight = styled.span`
   right: 0;
   bottom: -10px;
   text-align: center;
-  z-index: 10;
+  z-index: 2;
   font-weight: 700;
   color: ${(p) => p.theme.colors.secondary};
 `;

@@ -1,22 +1,31 @@
 import styled from "styled-components";
 
-export const Wrapper = styled.div`
+export const Cover = styled.div`
   position: fixed;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background: #00000033;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+  padding: 50px;
+`;
+
+export const Window = styled.div`
   border-radius: ${(p) => p.theme.borderRadius.card};
   box-shadow: ${(p) => p.theme.shadows.cardHover}, 0 0 0 1px ${(p) => p.theme.colors.quarternary}66;
-  padding: ${(p) => (p.isFixed ? p.theme.spacing.large : p.theme.spacing.medium)};
-  gap: ${(p) => p.theme.spacing.large};
   display: flex;
   flex-direction: column;
   align-items: stretch;
   background: #ffffff;
-  z-index: ${(p) => (p.isFixed ? 101 : 100)};
-  opacity: 0;
-  transition: opacity 0.1s, width 0.2s, height 0.2s, padding 0.2s;
+  z-index: 100;
   user-select: none;
-  transform: translate(-50%, -50%);
-  width: ${(p) => (p.isFixed ? 400 : 200)}px;
-  height: ${(p) => (p.isFixed ? 280 : 180)}px;
+  width: 60%;
+  position: relative;
+  max-height: 100%;
 
   &:focus {
     z-index: 102;
@@ -25,11 +34,20 @@ export const Wrapper = styled.div`
 
 export const Header = styled.div`
   ${(p) => p.theme.typography.title.h4};
-  padding-right: 40px;
   align-items: center;
   min-height: 40px;
   margin-top: -5px;
-  display: ${(p) => (p.isFixed ? "flex" : "none")};
+  display: flex;
+  padding: ${(p) => p.theme.spacing.xlarge};
+  margin-bottom: 0;
+  padding-right: 40px;
+`;
+
+export const Body = styled.div`
+  overflow: scroll;
+  flex-grow: 1;
+  padding: ${(p) => p.theme.spacing.xlarge};
+  padding-top: 0;
 `;
 
 export const Button = styled.div`

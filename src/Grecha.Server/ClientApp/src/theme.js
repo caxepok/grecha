@@ -48,6 +48,7 @@ const theme = {
   },
   borderRadius: {
     card: new CSSUnit(6),
+    button: new CSSUnit(4),
   },
   spacing: {
     xsmall: new CSSUnit(2),

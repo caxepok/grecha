@@ -1,38 +1,30 @@
-import React, { useMemo } from "react";
+import React from "react";
 import { TableRow } from "./table-row";
 import * as Markup from "./table.styles";
-import { AutoSizer } from "react-virtualized";
-import format from "date-fns/format";
 
 export const Table = React.memo((props) => {
-  const { data, threshold, isCompare } = props;
-  const headData = useMemo(() => {
-    if (!data || !data.length) return null;
-
-    return data[0].values.map((x) => x.date);
-  }, [data]);
+  const { head, data, parser } = props;
 
   if (!data) {
     return null;
   }
 
   return (
-    <AutoSizer>
-      {(style) => (
-        <Markup.Table style={style}>
-          <Markup.Head>
-            <span />
-            {headData.map((item, index) => (
-              <Markup.Value key={index}>{format(new Date(item), "dd/MM")}</Markup.Value>
+    <div style={{ width: "100%" }}>
+      <Markup.Table>
+        <Markup.Head>
+          <Markup.Row>
+            {head.map((item, index) => (
+              <Markup.Cell key={index}>{item}</Markup.Cell>
             ))}
-          </Markup.Head>
-          <Markup.Body>
-            {data.map((item) => (
-              <TableRow key={`${item.name}${item.id}`} {...item} threshold={threshold} isCompare={isCompare} />
-            ))}
-          </Markup.Body>
-        </Markup.Table>
-      )}
-    </AutoSizer>
+          </Markup.Row>
+        </Markup.Head>
+        <Markup.Body>
+          {data.map((item, index) => (
+            <TableRow key={index} data={item} parser={parser} />
+          ))}
+        </Markup.Body>
+      </Markup.Table>
+    </div>
   );
 });

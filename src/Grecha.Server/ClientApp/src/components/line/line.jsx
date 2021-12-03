@@ -7,15 +7,9 @@ import { shallowEqual, useDispatch, useSelector } from "react-redux";
 import { loadPhoto } from "../../pages/process/process.reducer";
 
 export const Line = React.memo((props) => {
-  const { id, title, data } = props;
+  const { title, data } = props;
   const [isAnimated, setAnimated] = useState(false);
   const dispatch = useDispatch();
-  const photo = useSelector(({ process }) => process.photos[id], shallowEqual);
-  const [images, setImages] = useState([photo]);
-
-  useEffect(() => {
-    photo && setImages((images) => [images[images.length - 1], photo]);
-  }, [photo]);
 
   useEffect(() => {
     data && setAnimated(true);
@@ -32,12 +26,18 @@ export const Line = React.memo((props) => {
   }, [data]);
 
   useEffect(() => {
-    lastMeasureId && dispatch(loadPhoto(id, lastCartId, lastMeasureId));
-  }, [lastCartId, lastMeasureId, id, dispatch]);
+    lastMeasureId && dispatch(loadPhoto(lastCartId, lastMeasureId));
+  }, [lastCartId, lastMeasureId, dispatch]);
+
+  const photo = useSelector(({ process }) => process.measuresPhoto[lastMeasureId], shallowEqual);
+  const [images, setImages] = useState([photo]);
+  useEffect(() => {
+    photo && setImages((images) => [images[images.length - 1], photo]);
+  }, [photo]);
 
   return (
     <Layout.Card align="center" title={title}>
-      <Layout.Row sizes={[5, 4]}>
+      <Layout.Row sizes={[1, "260px"]}>
         <Markup.Carts>
           <Markup.Crane>
             <CraneImage />

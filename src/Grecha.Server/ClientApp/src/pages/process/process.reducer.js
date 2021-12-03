@@ -1,12 +1,13 @@
 import * as dataApi from "../../services/carts";
 
 const initialState = {
-  photos: {},
+  measuresPhoto: {},
 };
 
 const SET_CARTS = "process/SET_CARTS";
 const ADD_MEASURE = "process/ADD_MEASURE";
-const UPDATE_LINE_PHOTO = "process/UPDATE_LINE_PHOTO";
+const SET_MEASURE_PHOTO = "process/SET_MEASURE_PHOTO";
+const SET_CART_DETAILS = "process/SET_CART_DETAILS";
 
 const implementMeasure = (measure, cart = {}) => ({
   ...cart,
@@ -47,24 +48,35 @@ const processReducer = (state = initialState, action) => {
       };
     }
 
-    case UPDATE_LINE_PHOTO: {
+    case SET_MEASURE_PHOTO: {
       return {
         ...state,
-        photos: {
-          ...state.photos,
-          [action.lineNumber]: action.data && URL.createObjectURL(action.data),
+        measuresPhoto: {
+          ...state.measuresPhoto,
+          [action.measureId]: action.data && URL.createObjectURL(action.data),
         },
       };
     }
+
+    case SET_CART_DETAILS:
+      return {
+        ...state,
+        details: action.data,
+      };
 
     default:
       return state;
   }
 };
 
-export const loadCarts = () => async (dispatch) => dispatch({ type: SET_CARTS, data: await dataApi.fetchData() });
+export const loadCarts = () => async (dispatch) => dispatch({ type: SET_CARTS, data: await dataApi.fetchCarts() });
+export const loadCart = (id) => async (dispatch) => {
+  dispatch({ type: SET_CART_DETAILS });
+  id && dispatch({ type: SET_CART_DETAILS, data: await dataApi.fetchCart(id) });
+};
+
 export const addMeasure = (data) => ({ type: ADD_MEASURE, data });
-export const loadPhoto = (lineNumber, cartId, measureId) => async (dispatch) =>
-  dispatch({ type: UPDATE_LINE_PHOTO, lineNumber, data: await dataApi.fetchPhoto(cartId, measureId) });
+export const loadPhoto = (cartId, measureId) => async (dispatch) =>
+  dispatch({ type: SET_MEASURE_PHOTO, measureId, data: await dataApi.fetchPhoto(cartId, measureId) });
 
 export default processReducer;
