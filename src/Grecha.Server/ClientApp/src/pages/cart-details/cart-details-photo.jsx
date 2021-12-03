@@ -5,14 +5,13 @@ import styled from "styled-components";
 import { loadPhoto } from "../process/process.reducer";
 
 export const CartDetailsPhoto = React.memo((props) => {
-  const { id } = props;
+  const { id, cartId } = props;
   const dispatch = useDispatch();
   const photo = useSelector(({ process }) => process.measuresPhoto[id]);
-  console.log(photo);
 
   const handleLoadPhoto = useCallback(() => {
-    dispatch(loadPhoto(0, id));
-  }, [id, dispatch]);
+    dispatch(loadPhoto(cartId, id));
+  }, [id, cartId, dispatch]);
 
   return photo ? (
     <a href={photo} target="_blank" rel="noreferrer">

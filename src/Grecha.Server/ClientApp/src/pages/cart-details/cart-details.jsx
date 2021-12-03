@@ -17,7 +17,7 @@ export const CartDetails = React.memo((props) => {
       timestamp: item.timestamp,
       quality: item.quality,
       weight: item.weight,
-      id: item.id,
+      photo: { id: item.id, cartId: item.cartId },
     }));
   }, [measures]);
 
@@ -27,7 +27,7 @@ export const CartDetails = React.memo((props) => {
     () => ({
       timestamp: (t) => format(new Date(t), "dd.MM.yyyy HH:mm"),
       quality: (q) => `${q}%`,
-      id: (id) => <CartDetailsPhoto id={id} />,
+      photo: (props) => <CartDetailsPhoto {...props} />,
     }),
     [],
   );
