@@ -11,11 +11,14 @@ export const Wrapper = styled.div`
   color: ${(p) => p.theme.colors.secondary};
   transition: box-shadow 0.1s, transform 0.1s;
   position: relative;
+  width: 100%;
 `;
 
 export const Title = styled.h2`
-  text-align: left;
   margin: 0;
+  padding: 15px 5px 7px;
+  display: flex;
+  justify-content: flex-start;
   ${(p) => p.theme.typography.title.h2};
   color: ${(p) => p.theme.colors.primary};
 `;

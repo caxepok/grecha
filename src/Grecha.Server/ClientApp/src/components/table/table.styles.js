@@ -1,5 +1,5 @@
 import styled, { css } from "styled-components";
-import { colors } from "../../consts";
+import { qualityColors } from "../../consts";
 
 export const Table = styled.div`
   flex-basis: 100%;
@@ -72,7 +72,7 @@ export const Value = styled.span`
         width: 8px;
         height: 8px;
         border-radius: 5px;
-        background: ${colors.danger};
+        background: ${qualityColors.danger};
         display: inline-block;
         border: 1px solid #ffffff;
       }

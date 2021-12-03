@@ -1,1 +1,0 @@
-export { PageCatalog } from "./catalog"

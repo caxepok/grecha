@@ -6,12 +6,12 @@ import styled from "styled-components";
 
 const Card = React.memo(
   React.forwardRef((props, ref) => {
-    const { title, children, placeholder } = props;
+    const { title, children, placeholder, align } = props;
 
     return (
       <CardMarkup.Wrapper ref={ref}>
         {title && <CardMarkup.Title>{title}</CardMarkup.Title>}
-        <CardMarkup.Content>{children}</CardMarkup.Content>
+        <CardMarkup.Content align={align}>{children}</CardMarkup.Content>
         {placeholder && <CardMarkup.Placeholder>{placeholder}</CardMarkup.Placeholder>}
       </CardMarkup.Wrapper>
     );

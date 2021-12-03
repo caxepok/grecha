@@ -1,5 +1,5 @@
 import styled, { css } from "styled-components";
-import { colors } from "../../consts";
+import { qualityColors } from "../../consts";
 
 export const Wrapper = styled.div`
   display: flex;
@@ -26,7 +26,7 @@ export const Chart = styled.div`
         bottom: ${p.threshold}%;
         transform: translateY(50%);
         padding: 0 3px;
-        color: ${colors.danger};
+        color: ${qualityColors.danger};
       }
 
       &:before {
@@ -36,8 +36,8 @@ export const Chart = styled.div`
         right: 0;
         bottom: ${p.thresholdDirection ? 0 : p.threshold}%;
         height: ${p.thresholdDirection ? p.threshold : 100 - p.threshold}%;
-        background: ${colors.danger}11;
-        border-${p.thresholdDirection ? "top" : "bottom"}: 1px dashed ${colors.danger};
+        background: ${qualityColors.danger}11;
+        border-${p.thresholdDirection ? "top" : "bottom"}: 1px dashed ${qualityColors.danger};
         z-index: 1;
       }
     `}
@@ -99,7 +99,7 @@ export const Bar = styled.div(
       top: 0;
       height: 100%;
       transform: translateX(-50%);
-      background: linear-gradient(to bottom, ${colors[p.type]} 40%, ${colors[p.type]}99 100%);
+      background: linear-gradient(to bottom, ${qualityColors[p.type]} 40%, ${qualityColors[p.type]}99 100%);
     }
   `,
 );

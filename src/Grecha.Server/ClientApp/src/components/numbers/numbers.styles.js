@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { colors } from "../../consts";
+import { qualityColors } from "../../consts";
 
 export const Wrapper = styled.div`
   display: flex;
@@ -10,7 +10,7 @@ export const Wrapper = styled.div`
 
 export const Number = styled.span`
   ${(p) => p.theme.typography.title.h2};
-  color: ${(p) => colors[p.type]};
+  color: ${(p) => qualityColors[p.type]};
 
   &:before {
     content: "/";

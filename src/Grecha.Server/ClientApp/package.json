@@ -3,6 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@microsoft/signalr": "^6.0.0",
+    "@microsoft/signalr-protocol-msgpack": "^6.0.0",
     "@testing-library/jest-dom": "^5.11.4",
     "@testing-library/react": "^11.1.0",
     "@testing-library/user-event": "^12.1.10",
@@ -21,7 +23,6 @@
     "react-vis": "^1.11.7",
     "redux": "^4.1.1",
     "redux-thunk": "^2.3.0",
-    "signalr": "^2.4.2",
     "styled-components": "^5.3.3",
     "uuid": "^8.3.2",
     "web-vitals": "^1.0.1"

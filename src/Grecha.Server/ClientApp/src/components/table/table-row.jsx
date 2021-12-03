@@ -3,22 +3,22 @@ import { v4 } from "uuid";
 import ReactTooltip from "react-tooltip";
 import { ReactComponent as ExpandIcon } from "../../assets/shevron.svg";
 import * as Markup from "./table.styles";
-import { colors } from "../../consts";
+import { qualityColors } from "../../consts";
 
 const getCellStyles = (item, threshold, isCompare) => {
   if (isCompare) {
     const { diff } = item;
-    if (typeof diff === "number" && diff > 0) return { background: `${colors.success}44` };
+    if (typeof diff === "number" && diff > 0) return { background: `${qualityColors.success}44` };
     if (typeof diff === "number" && diff < 0)
-      return { background: `${colors.danger}`, color: "#FFFFFF", fontWeight: 700 };
-    return { background: `${colors.warning}` };
+      return { background: `${qualityColors.danger}`, color: "#FFFFFF", fontWeight: 700 };
+    return { background: `${qualityColors.warning}` };
   }
 
   const { value } = item;
   if (value > 100) return { background: `#660000`, color: "#FFFFFF", fontWeight: 700 };
-  if (value < threshold - 5) return { background: `${colors.danger}`, color: "#FFFFFF", fontWeight: 700 };
-  if (value > threshold + 5) return { background: `${colors.success}44` };
-  return { background: `${colors.warning}` };
+  if (value < threshold - 5) return { background: `${qualityColors.danger}`, color: "#FFFFFF", fontWeight: 700 };
+  if (value > threshold + 5) return { background: `${qualityColors.success}44` };
+  return { background: `${qualityColors.warning}` };
 };
 
 const getValueLabel = (item, isCompare = false) => {

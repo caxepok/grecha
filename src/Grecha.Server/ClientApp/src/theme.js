@@ -17,12 +17,13 @@ class CSSUnit {
 
 const theme = {
   colors: {
-    background: "#F2F2F2",
-    accent: "#843FB5",
+    background: "#ECE4DC",
+    accent: "#A1531A",
     primary: "#222222",
     secondary: "#555555",
     tertiary: "#999999",
     quarternary: "#CCCCCC",
+    white: "#FFFFFF",
   },
   typography: {
     fontSize: new CSSUnit(13),

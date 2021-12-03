@@ -33,6 +33,7 @@ export const Title = styled.h3`
 export const Content = styled.div`
   flex-basis: 100%;
   display: flex;
+  justify-content: ${(p) => p.align || "flex-start"};
 `;
 
 export const Placeholder = styled.div`
