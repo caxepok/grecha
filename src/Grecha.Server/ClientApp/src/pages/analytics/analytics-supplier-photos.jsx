@@ -1,24 +1,34 @@
 import React, { useEffect } from "react";
 import { shallowEqual, useDispatch, useSelector } from "react-redux";
-import { loadPhoto } from "../process/process.reducer";
+import { loadMeasurePhoto } from "../process/process.reducer";
 import styled from "styled-components";
 
 export const AnalyticsSupplierPhotos = React.memo((props) => {
   const { measures } = props;
   const dispatch = useDispatch();
-  const photos = useSelector(({ process }) => measures.map(({ id }) => process.measuresPhoto[id]), shallowEqual);
+  const measurePhotos = useSelector(({ process }) => measures.map(({ id }) => process.measurePhotos[id]), shallowEqual);
 
   useEffect(() => {
-    measures.forEach(({ id, cartId }) => dispatch(loadPhoto(cartId, id)));
+    measures.forEach(({ id, cartId }) => {
+      dispatch(loadMeasurePhoto(cartId, id));
+    });
   }, [measures, dispatch]);
 
   return (
     <Wrapper>
-      {photos.map((url) => (
-        <a href={url} target={"_blank"} rel={"noreferrer"}>
-          <Image src={url} key={url} />
-        </a>
-      ))}
+      {measurePhotos.map(
+        (obj) =>
+          obj && (
+            <>
+              <a href={obj.up} target={"_blank"} rel={"noreferrer"}>
+                <Image src={obj.up} key={obj.up} />
+              </a>
+              <a href={obj.side} target={"_blank"} rel={"noreferrer"}>
+                <Image src={obj.side} key={obj.side} />
+              </a>
+            </>
+          ),
+      )}
     </Wrapper>
   );
 });
@@ -27,10 +37,10 @@ const Wrapper = styled.span`
   display: flex;
   gap: 4px;
   margin: -6px 0;
+  flex-wrap: wrap;
 `;
 
 const Image = styled.img`
-  width: 40px;
-  height: 30px;
+  height: 40px;
   display: block;
 `;

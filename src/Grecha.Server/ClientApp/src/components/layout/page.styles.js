@@ -16,7 +16,7 @@ export const Wrapper = styled.div`
 
 export const Title = styled.h2`
   margin: 0;
-  padding: 15px 5px 7px;
+  padding: 10px 5px;
   display: flex;
   justify-content: flex-start;
   ${(p) => p.theme.typography.title.h2};
@@ -25,7 +25,7 @@ export const Title = styled.h2`
 
 export const Header = styled.div`
   display: flex;
-  justify-content: space-between;
+  gap: 30px;
 `;
 
 export const Content = styled.div`

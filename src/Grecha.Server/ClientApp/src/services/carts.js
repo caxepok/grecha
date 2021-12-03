@@ -23,9 +23,20 @@ export const fetchCart = async (id) => {
     return null;
   }
 };
-export const fetchPhoto = async (cartId, measureId) => {
+export const fetchMeasurePhoto = async (cartId, measureId) => {
   try {
     const res = await fetch(`${API_URL}/cart/${cartId}/${measureId}/up`);
+    if (res.status === 200) {
+      return await res.blob();
+    }
+    return null;
+  } catch {
+    return null;
+  }
+};
+export const fetchSidePhoto = async (cartId, measureId) => {
+  try {
+    const res = await fetch(`${API_URL}/cart/${cartId}/${measureId}/side`);
     if (res.status === 200) {
       return await res.blob();
     }

@@ -1,12 +1,14 @@
 import * as cartsApi from "../../services/carts";
 
 const initialState = {
-  measuresPhoto: {},
+  measurePhotos: {},
+  sidePhotos: {},
 };
 
 const SET_CARTS = "process/SET_CARTS";
 const ADD_MEASURE = "process/ADD_MEASURE";
 const SET_MEASURE_PHOTO = "process/SET_MEASURE_PHOTO";
+
 const SET_CART_DETAILS = "process/SET_CART_DETAILS";
 
 const implementMeasure = (measure, cart = {}) => ({
@@ -51,9 +53,12 @@ const processReducer = (state = initialState, action) => {
     case SET_MEASURE_PHOTO: {
       return {
         ...state,
-        measuresPhoto: {
-          ...state.measuresPhoto,
-          [action.measureId]: action.data && URL.createObjectURL(action.data),
+        measurePhotos: {
+          ...state.measurePhotos,
+          [action.measureId]: {
+            ...state.measurePhotos[action.measureId],
+            [action.key]: action.data && URL.createObjectURL(action.data),
+          },
         },
       };
     }
@@ -76,8 +81,22 @@ export const loadCart = (id) => async (dispatch) => {
 };
 
 export const addMeasure = (data) => ({ type: ADD_MEASURE, data });
-export const loadPhoto = (cartId, measureId) => async (dispatch, getState) =>
-  !(getState().process.measuresPhoto && getState().process.measuresPhoto[measureId]) &&
-  dispatch({ type: SET_MEASURE_PHOTO, measureId, data: await cartsApi.fetchPhoto(cartId, measureId) });
+export const loadMeasurePhoto = (cartId, measureId) => async (dispatch, getState) => {
+  if (getState().process.measurePhotos && getState().process.measurePhotos[measureId]) return;
+
+  dispatch({
+    type: SET_MEASURE_PHOTO,
+    measureId,
+    key: "up",
+    data: await cartsApi.fetchMeasurePhoto(cartId, measureId),
+  });
+
+  dispatch({
+    type: SET_MEASURE_PHOTO,
+    measureId,
+    key: "side",
+    data: await cartsApi.fetchSidePhoto(cartId, measureId),
+  });
+};
 
 export default processReducer;

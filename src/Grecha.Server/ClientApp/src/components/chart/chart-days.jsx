@@ -1,9 +1,9 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import format from "date-fns/format";
-import subMinutes from "date-fns/subMinutes";
+import subDays from "date-fns/subDays";
 import * as Markup from "./chart.styles";
 
-export const ChartTimes = React.memo((props) => {
+export const ChartDays = React.memo((props) => {
   const { values } = props;
   const [params, setParams] = useState();
   const blockRef = useRef(null);
@@ -13,7 +13,7 @@ export const ChartTimes = React.memo((props) => {
     let end = values[values.length - 1];
     let res = 1;
     for (let i = 1; i < values.length; i++) {
-      if (subMinutes(end, 1) > values[0]) {
+      if (subDays(end, 1) > values[0]) {
         res++;
       }
     }
@@ -42,7 +42,7 @@ export const ChartTimes = React.memo((props) => {
         values &&
         [...new Array(params.count)].map((x, index) => (
           <span key={index} style={{ maxWidth: `${params.itemWidth}%`, minWidth: `${params.itemWidth}%` }}>
-            {format(subMinutes(values[values.length - 1], index * params.multiplier), "hh:mm")}
+            {format(subDays(values[values.length - 1], index * params.multiplier), "dd/MM")}
           </span>
         ))}
     </Markup.Dates>

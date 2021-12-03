@@ -4,7 +4,7 @@ import { ReactComponent as CraneImage } from "./crane.svg";
 import { Cart } from "../cart/cart";
 import * as Markup from "./line.styles";
 import { shallowEqual, useDispatch, useSelector } from "react-redux";
-import { loadPhoto } from "../../pages/process/process.reducer";
+import { loadMeasurePhoto } from "../../pages/process/process.reducer";
 
 export const Line = React.memo((props) => {
   const { title, data } = props;
@@ -26,10 +26,10 @@ export const Line = React.memo((props) => {
   }, [data]);
 
   useEffect(() => {
-    lastMeasureId && dispatch(loadPhoto(lastCartId, lastMeasureId));
+    lastMeasureId && dispatch(loadMeasurePhoto(lastCartId, lastMeasureId));
   }, [lastCartId, lastMeasureId, dispatch]);
 
-  const photo = useSelector(({ process }) => process.measuresPhoto[lastMeasureId], shallowEqual);
+  const photo = useSelector(({ process }) => process.measurePhotos[lastMeasureId], shallowEqual);
   const [images, setImages] = useState([photo]);
   useEffect(() => {
     photo && setImages((images) => [images[images.length - 1], photo]);
@@ -44,7 +44,7 @@ export const Line = React.memo((props) => {
           </Markup.Crane>
           {data && data.map((item) => <Cart key={item.number} {...item} isAnimated={isAnimated} />)}
         </Markup.Carts>
-        <Markup.Photo>{images.map((image) => image && <img src={image} key={image} alt="" />)}</Markup.Photo>
+        <Markup.Photo>{images.map((image) => image && <img src={image.up} key={image.up} alt="" />)}</Markup.Photo>
       </Layout.Row>
     </Layout.Card>
   );

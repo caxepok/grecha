@@ -1,11 +1,10 @@
 import React, { useEffect, useMemo } from "react";
-import { Route } from "react-router-dom";
-import { ChartLine, Layout, NavList, Tabs } from "../../components";
+import { Switch, Route } from "react-router-dom";
+import { Layout, NavList, Tabs } from "../../components";
 import { AnalyticsSupplier } from "./analytics-supplier";
+import { AnalyticsCharts } from "./analytics-charts";
 import { shallowEqual, useDispatch, useSelector } from "react-redux";
 import { loadSuppliers } from "./analytics.reducer";
-import { Switch } from "react-router";
-import { analyticsChartData } from "./analytics.chart-data";
 
 export const Analytics = React.memo(() => {
   const dispatch = useDispatch();
@@ -41,11 +40,9 @@ export const Analytics = React.memo(() => {
             </Layout.Card>
           </Layout.Row>
         </Route>
-        <Route path={`/analytics/${tabs[1].id}`}>
+        <Route path={`/analytics/${tabs[1].id}/:period?`}>
           <Layout.Row>
-            <Layout.Card title="Чистота сырья">
-              <ChartLine values={analyticsChartData} />
-            </Layout.Card>
+            <AnalyticsCharts />
           </Layout.Row>
         </Route>
       </Switch>

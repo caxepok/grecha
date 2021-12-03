@@ -1,9 +1,10 @@
-import * as suppliersApi from "../../services/suppliers";
+import * as suppliersApi from "../../services/analytics";
 
 const initialState = {};
 
 const SET_SUPPLIERS = "analytics/SET_SUPPLIERS";
 const SET_SUPPLIER_DETAILS = "analytics/SET_SUPPLIER_DETAILS";
+const SET_CHARTS = "analytics/SET_CHARTS";
 
 const analyticsReducer = (state = initialState, action) => {
   switch (action.type) {
@@ -19,6 +20,15 @@ const analyticsReducer = (state = initialState, action) => {
         details: action.data,
       };
 
+    case SET_CHARTS:
+      return {
+        ...state,
+        charts: {
+          ...state.charts,
+          [action.period]: action.data,
+        },
+      };
+
     default:
       return state;
   }
@@ -31,5 +41,10 @@ export const loadSupplier = (id) => async (dispatch) => {
   dispatch({ type: SET_SUPPLIER_DETAILS });
   dispatch({ type: SET_SUPPLIER_DETAILS, data: await suppliersApi.fetchSupplier(id) });
 };
+
+export const loadAnalytics =
+  (period = "day") =>
+  async (dispatch) =>
+    dispatch({ type: SET_CHARTS, period, data: await suppliersApi.fetchAnalytics(period) });
 
 export default analyticsReducer;

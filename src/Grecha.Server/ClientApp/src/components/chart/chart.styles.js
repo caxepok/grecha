@@ -18,26 +18,14 @@ export const Chart = styled.div`
   ${(p) =>
     p.threshold &&
     css`
-      &:after {
-        font-size: 11px;
-        content: "${p.threshold}%";
-        position: absolute;
-        left: -10px;
-        bottom: ${p.threshold}%;
-        transform: translateY(50%);
-        padding: 0 3px;
-        color: ${qualityColors.danger};
-      }
-
       &:before {
         position: absolute;
         content: "";
         left: 0;
         right: 0;
-        bottom: ${p.thresholdDirection ? 0 : p.threshold}%;
-        height: ${p.thresholdDirection ? p.threshold : 100 - p.threshold}%;
-        background: ${qualityColors.danger}11;
-        border-${p.thresholdDirection ? "top" : "bottom"}: 1px dashed ${qualityColors.danger};
+        bottom: ${p.threshold}%;
+        height: ${100 - p.threshold}%;
+        border-${"bottom"}: 2px dotted ${qualityColors[4]};
         z-index: 1;
       }
     `}
