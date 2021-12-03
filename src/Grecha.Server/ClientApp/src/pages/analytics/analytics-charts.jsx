@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo } from "react";
-import { ChartLine, Layout, Tabs } from "../../components";
 import { useParams } from "react-router-dom";
 import { shallowEqual, useDispatch, useSelector } from "react-redux";
+import { ChartLine, Layout, Tabs } from "../../components";
 import { loadAnalytics } from "./analytics.reducer";
 
 export const AnalyticsCharts = React.memo(() => {

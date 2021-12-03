@@ -5,6 +5,7 @@ import { BrowserRouter as Router, Route, Switch, Redirect } from "react-router-d
 import { ThemeProvider } from "styled-components";
 import processReducer from "./pages/process/process.reducer";
 import analyticsReducer from "./pages/analytics/analytics.reducer";
+import settingsReducer from "./pages/settings/settings.reducer";
 import thunk from "redux-thunk";
 import theme from "./theme";
 import { Layout, Navigation } from "./components";
@@ -18,6 +19,7 @@ function App() {
     combineReducers({
       process: processReducer,
       analytics: analyticsReducer,
+      settings: settingsReducer,
     }),
     composeEnhancers(applyMiddleware(thunk)),
   );
@@ -34,7 +36,7 @@ function App() {
               <Switch>
                 <Route path="/process" component={Process} />
                 <Route path="/analytics" component={Analytics} />
-                <Route path="/settings" component={Settings} />
+                <Route path="/settings/:tab?" component={Settings} />
                 <Redirect to="/process" />
               </Switch>
             </Layout.Row>
