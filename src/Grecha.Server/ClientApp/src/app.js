@@ -15,7 +15,7 @@ function App() {
 
   const store = createStore(
     combineReducers({
-      carts: processReducer,
+      process: processReducer,
     }),
     composeEnhancers(applyMiddleware(thunk)),
   );

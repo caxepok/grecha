@@ -11,3 +11,15 @@ export const fetchData = async () => {
     return null;
   }
 };
+
+export const fetchPhoto = async (cartId, measureId) => {
+  try {
+    const res = await fetch(`${API_URL}/cart/${cartId}/${measureId}/up`);
+    if (res.status === 200) {
+      return await res.blob();
+    }
+    return null;
+  } catch {
+    return null;
+  }
+};

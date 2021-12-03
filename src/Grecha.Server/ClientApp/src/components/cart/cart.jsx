@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { ReactComponent as CartImage } from "./cart.svg";
-import { qualityColors } from "../../consts";
 import * as Markup from "./cart.styles";
 
 export const Cart = React.memo((props) => {
-  const { number, quality, qualityLevel, isAnimated = false } = props;
+  const { number, quality, qualityLevel, supplier, isAnimated = false } = props;
   const [hasMargin, setHasMargin] = useState(isAnimated);
 
   useEffect(() => {
@@ -12,8 +11,9 @@ export const Cart = React.memo((props) => {
   }, []);
 
   return (
-    <Markup.Wrapper {...{ hasMargin }}>
-      <CartImage fill={qualityColors[qualityLevel]} />
+    <Markup.Wrapper {...{ hasMargin }} qualityLevel={qualityLevel}>
+      <CartImage />
+      {supplier && <Markup.Supplier>{supplier.name}</Markup.Supplier>}
       <Markup.Number>{number}</Markup.Number>
       <Markup.Quality>{quality}%</Markup.Quality>
     </Markup.Wrapper>

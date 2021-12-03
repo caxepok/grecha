@@ -23,7 +23,7 @@ export const Navigation = React.memo(() => {
       <Title>
         <Logo>
           <img src="/logo.png" alt={"Греча"} />
-          Высший сорт
+          Крупье
         </Logo>
       </Title>
       <Layout.Card>

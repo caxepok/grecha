@@ -28,3 +28,17 @@ export const Crane = styled.div`
 export const Info = styled.div`
   margin-top: -36px;
 `;
+
+export const Photo = styled.div`
+  margin-top: -40px;
+  margin-left: 30px;
+  width: 230px;
+  position: relative;
+
+  > img {
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    border-radius: ${(p) => p.theme.borderRadius.card};
+  }
+`;

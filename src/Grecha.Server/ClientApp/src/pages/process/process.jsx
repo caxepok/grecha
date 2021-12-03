@@ -3,16 +3,15 @@ import styled from "styled-components";
 import { HubConnectionBuilder } from "@microsoft/signalr";
 import { Line, Layout } from "../../components";
 import { shallowEqual, useDispatch, useSelector } from "react-redux";
-import { loadData } from "./process.reducer";
+import { loadCarts, addMeasure } from "./process.reducer";
 import { API_URL } from "../../consts";
-import { MessagePackHubProtocol } from "@microsoft/signalr-protocol-msgpack";
 
 export const Process = React.memo(() => {
   const dispatch = useDispatch();
   const [lines, setLines] = useState(null);
-  const carts = useSelector(({ carts }) => carts?.data, shallowEqual);
+  const carts = useSelector(({ process }) => process?.carts, shallowEqual);
 
-  useEffect(() => dispatch(loadData()), [dispatch]);
+  useEffect(() => dispatch(loadCarts()), [dispatch]);
 
   useEffect(() => {
     if (carts) {
@@ -24,25 +23,15 @@ export const Process = React.memo(() => {
     }
   }, [carts]);
 
-  const handleSignalRUpdate = useCallback(
-    (data) => {
-      console.log(data);
-    },
-    [dispatch],
-  );
+  const handleUpdateCart = useCallback((data) => dispatch(addMeasure(data)), [dispatch]);
 
   useEffect(() => {
-    const hubConnection = new HubConnectionBuilder()
-      .withUrl(`${API_URL}/hub`)
-      .withHubProtocol(new MessagePackHubProtocol())
-      .withAutomaticReconnect()
-      .build();
-
-    hubConnection.on("measure", console.log);
+    const hubConnection = new HubConnectionBuilder().withUrl(`${API_URL}/hub`).withAutomaticReconnect().build();
+    hubConnection.on("Measured", handleUpdateCart);
     hubConnection.start();
 
     return () => hubConnection?.stop();
-  }, [handleSignalRUpdate]);
+  }, [handleUpdateCart]);
 
   return (
     <Layout.Page title="Процесс">
