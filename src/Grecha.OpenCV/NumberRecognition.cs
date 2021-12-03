@@ -2,19 +2,27 @@
 
 namespace Grecha.OpenCV
 {
+    /// <summary>
+    /// Класс для распознавания номеров на вагонах
+    /// OpenCV + tesseract
+    /// </summary>
     public class NumberRecognition
     {
+        /// <summary>
+        /// Ищет восьмизначный номер вагона на изображении
+        /// </summary>
+        /// <param name="image">изображение</param>
+        /// <returns>номер вагона</returns>
         public static string Execute(byte[] image)
         {
-            string text = String.Empty;
-            // повернём картинк
             // читает картинку
             Mat source = Mat.FromImageData(image);
+            // повернём картинку (т.к. со второго телефона она приходит почему-то перевёрнутой)
             Cv2.Rotate(source, source, RotateFlags.Rotate90Clockwise);
             // переводом в ч\б
             Mat gray = new Mat();
             Cv2.CvtColor(source, gray, ColorConversionCodes.BGR2GRAY);
-
+            // бинаризруем
             Mat tresh = new Mat();
             Cv2.Threshold(gray, tresh, 128, 255, ThresholdTypes.Binary | ThresholdTypes.Otsu);
             SaveImage(tresh, $"tresh");
@@ -24,10 +32,13 @@ namespace Grecha.OpenCV
             Cv2.Dilate(tresh, dilation, kernel, iterations: 1);
             dilation = ~dilation;
 
+            // ищем контуры
             Cv2.FindContours(dilation, out var contours, out var hier, RetrievalModes.External, ContourApproximationModes.ApproxNone);
 
+            // среди контуров ищем прямугольник с тектом
             Mat rects = source.Clone();
             int i = 0;
+            string text = String.Empty;
             foreach (var contour in contours)
             {
                 var rect = Cv2.BoundingRect(contour);
@@ -43,12 +54,14 @@ namespace Grecha.OpenCV
                 text = ExtractCartNumber(text);
                 if (text != String.Empty)
                 {
+                    // сохраним превьюшку чтобы понимать что происходит
                     SaveImage(crop, $"crop");
+                    Cv2.Rectangle(rects, rect, Scalar.Blue);
                     Cv2.PutText(rects, text, rect.Location, HersheyFonts.HersheyComplex, 2, Scalar.Red);
+                    SaveImage(rects, "rects");
+                    break;
                 }
-                Cv2.Rectangle(rects, rect, Scalar.Blue);
             }
-            SaveImage(rects, "rects");
             return text;
         }
 
@@ -62,12 +75,15 @@ namespace Grecha.OpenCV
             if (String.IsNullOrEmpty(text))
                 return String.Empty;
             text = String.Concat(text.Where(_ => Char.IsDigit(_)));
-            if (text.Length < 8)
+            if (text.Length != 8)
                 return String.Empty;
             return text;
         }
 
+        /// <summary>
+        /// Сохраняет превьюшку на диск
+        /// </summary>
         private static void SaveImage(Mat mat, string name) =>
-            mat.SaveImage($"C:\\temp\\grecha\\ocr-{name}.jpg");
+            mat.SaveImage($"c:\\temp\\grecha\\ocr-{name}.jpg");
     }
 }

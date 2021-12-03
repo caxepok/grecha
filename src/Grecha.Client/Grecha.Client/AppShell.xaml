@@ -31,7 +31,6 @@
 
     <TabBar>
         <ShellContent Title="Camera" Icon="icon_about.png" Route="CameraPage" ContentTemplate="{DataTemplate local:CameraPage}" />
-        <ShellContent Title="Browse" Icon="icon_feed.png" ContentTemplate="{DataTemplate local:ItemsPage}" />
     </TabBar>
 
 </Shell>

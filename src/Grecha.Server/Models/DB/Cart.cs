@@ -12,18 +12,33 @@ namespace Grecha.Server.Models.DB
         /// </summary>
         public long Id { get; set; }
         /// <summary>
+        /// Идентификатор поставщика
+        /// </summary>
+        public long SupplierId { get; set; }
+        /// <summary>
         /// Номер вагона
         /// </summary>
         public string Number { get; set; }
         /// <summary>
-        /// Поставщик
+        /// Номер линии
         /// </summary>
-        public string Supplier { get; set; }
+        public int Line { get; set; }
+        /// <summary>
+        /// Последнее измерение качества
+        /// </summary>
+        public int Quality { get; set; }
+        /// <summary>
+        /// Уровнень качества с последнего измерения
+        /// </summary>
+        public int QualityLevel { get; set; }   
 
         /// <summary>
         /// Измерения, производимые для этого вагона
         /// </summary>
-
         public virtual ICollection<Measure> Measures { get; set; }
+        /// <summary>
+        /// Поставщик, которому принадлежит вагон
+        /// </summary>
+        public virtual Supplier Supplier { get; set; }  
     }
 }

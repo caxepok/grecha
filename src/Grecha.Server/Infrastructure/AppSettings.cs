@@ -14,5 +14,8 @@ namespace grechaserver.Infrastructure
         /// Путь к хранилищу изображений
         /// </summary>
         public string ImageStore { get; set; }
+        public int QualityGood { get; set; } = 90;
+        public int QualityNormal { get; set; } = 80;
+        public int QualityLow { get; set; } = 65;
     }
 }

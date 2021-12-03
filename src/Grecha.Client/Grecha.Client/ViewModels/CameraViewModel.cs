@@ -2,9 +2,6 @@
 using System;
 using System.Diagnostics;
 using System.Threading.Tasks;
-using System.Windows.Input;
-using Xamarin.Essentials;
-using Xamarin.Forms;
 
 namespace Grecha.Client.ViewModels
 {
@@ -14,7 +11,7 @@ namespace Grecha.Client.ViewModels
 
         public CameraViewModel()
         {
-            Title = "Grecha";
+            Title = "Grecha Camera";
 
             _grechaService = new GrechaAPIService();
         }
@@ -23,14 +20,12 @@ namespace Grecha.Client.ViewModels
         {
             try
             {
-                var result = await _grechaService.PostImageAsync(data);
+                await _grechaService.PostImageAsync(data);
             }
             catch (Exception ex)
             {
                 Debug.WriteLine($"Exception occured on image processing: {ex}");
             }
         }
-
-        public ICommand OpenWebCommand { get; } = new Command(async () => await Browser.OpenAsync("https://aka.ms/xamarin-quickstart"));
     }
 }

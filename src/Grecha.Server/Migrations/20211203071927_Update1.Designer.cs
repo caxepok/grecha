@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using grechaserver.Infrastructure;
@@ -9,9 +10,10 @@ using grechaserver.Infrastructure;
 namespace Grecha.Server.Migrations
 {
     [DbContext(typeof(GrechaDBContext))]
-    partial class GrechaDBContextModelSnapshot : ModelSnapshot
+    [Migration("20211203071927_Update1")]
+    partial class Update1
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -38,12 +40,10 @@ namespace Grecha.Server.Migrations
                     b.Property<int>("QualityLevel")
                         .HasColumnType("integer");
 
-                    b.Property<long>("SupplierId")
-                        .HasColumnType("bigint");
+                    b.Property<string>("Supplier")
+                        .HasColumnType("text");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("SupplierId");
 
                     b.ToTable("Carts");
                 });
@@ -64,40 +64,11 @@ namespace Grecha.Server.Migrations
                     b.Property<DateTimeOffset>("Timestamp")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<int>("Weight")
-                        .HasColumnType("integer");
-
                     b.HasKey("Id");
 
                     b.HasIndex("CartId");
 
                     b.ToTable("Measures");
-                });
-
-            modelBuilder.Entity("Grecha.Server.Models.DB.Supplier", b =>
-                {
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
-
-                    b.Property<string>("Name")
-                        .HasColumnType("text");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Supplier");
-                });
-
-            modelBuilder.Entity("Grecha.Server.Models.DB.Cart", b =>
-                {
-                    b.HasOne("Grecha.Server.Models.DB.Supplier", "Supplier")
-                        .WithMany("Carts")
-                        .HasForeignKey("SupplierId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Supplier");
                 });
 
             modelBuilder.Entity("Grecha.Server.Models.DB.Measure", b =>
@@ -114,11 +85,6 @@ namespace Grecha.Server.Migrations
             modelBuilder.Entity("Grecha.Server.Models.DB.Cart", b =>
                 {
                     b.Navigation("Measures");
-                });
-
-            modelBuilder.Entity("Grecha.Server.Models.DB.Supplier", b =>
-                {
-                    b.Navigation("Carts");
                 });
 #pragma warning restore 612, 618
         }

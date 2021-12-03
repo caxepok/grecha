@@ -25,15 +25,15 @@ namespace grechaserver.Controllers
         }
 
         /// <summary>
-        /// Принимает изображение на обработку
+        /// Принимает изображение на обработку с камер
         /// </summary>
         /// <param name="side">идентификатор камеры</param>
         /// <param name="data">данные</param>
         [HttpPost("")]
         public async Task<IActionResult> ProcessImage([FromQuery]string side, [FromBody] byte[] data)
         {
-            var result = _imageService.ProcessImage(side, data);
-            return Ok(result);
+            await _imageService.ProcessImage(side, data);
+            return Ok();
         }
     }
 }

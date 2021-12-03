@@ -25,18 +25,6 @@ namespace grechaserver.Controllers
             _imageService = imageService;
         }
 
-        /// <summary>
-        /// Возвращает список составов, которые были учтены системой
-        /// </summary>
-        /// <param name="side">идентификатор камеры</param>
-        /// <param name="data">данные</param>
-        [HttpPost("")]
-        public async Task<IActionResult> ProcessImage([FromQuery]string side, [FromBody] byte[] data)
-        {
-            var result = _imageService.ProcessImage(side, data);
-            return Ok(result);
-        }
-
         [HttpGet("")]
         public async Task<IActionResult> GetCarts()
         {
@@ -47,6 +35,12 @@ namespace grechaserver.Controllers
         public async Task<IActionResult> GetCart(long id)
         {
             return Ok(_grechaDBContext.Carts.Include(_ => _.Measures).SingleOrDefaultAsync(_ => _.Id == id));
+        }
+
+        [HttpGet("{id}/{measureId}/{side}")]
+        public async Task<IActionResult> GetMeasureImage(long id, long measureId, string side)
+        {
+            return File(await _imageService.GetShotAsync(id, measureId, side), "image/jpeg");    
         }
     }
 }

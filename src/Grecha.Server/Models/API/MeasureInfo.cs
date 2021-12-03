@@ -1,10 +1,21 @@
-﻿namespace Grecha.Server.Models.API
+﻿using MessagePack;
+
+namespace Grecha.Server.Models.API
 {
     /// <summary>
-    /// Данные снимка
+    /// Данные измерения
     /// </summary>
-    public class ShotInfo
+    [MessagePackObject]
+    public class MeasureInfo
     {
+        /// <summary>
+        /// Идентификатор вагона
+        /// </summary>
+        public int CartId {get;set;}
+        /// <summary>
+        /// Идентификатор линии
+        /// </summary>
+        public int LineNumber { get; set; }
         /// <summary>
         /// Номер вагона
         /// </summary>
@@ -17,5 +28,9 @@
         /// Уровень качаства (1 - хорошее, 2 - удовлетворительное, 3 - низкое, 4 - неудовлетворительное)
         /// </summary>
         public int QualityLevel { get; set; }
+        /// <summary>
+        /// Вес вагона
+        /// </summary>
+        public int Weight { get; set; }
     }
 }

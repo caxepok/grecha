@@ -23,6 +23,10 @@ namespace Grecha.Server.Models.DB
         /// Качество сырья
         /// </summary>
         public int Quality { get; set; }
+        /// <summary>
+        /// Текущий вагона
+        /// </summary>
+        public int Weight { get;set; }
 
         public virtual Cart Cart { get; set; }
 
