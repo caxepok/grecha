@@ -3,7 +3,7 @@ import { TableRow } from "./table-row";
 import * as Markup from "./table.styles";
 
 export const Table = React.memo((props) => {
-  const { head, data, parser } = props;
+  const { head, data, parser, children } = props;
 
   if (!data) {
     return null;
@@ -25,6 +25,7 @@ export const Table = React.memo((props) => {
           ))}
         </Markup.Body>
       </Markup.Table>
+      {children}
     </div>
   );
 });

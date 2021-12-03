@@ -1,4 +1,4 @@
-import * as dataApi from "../../services/carts";
+import * as cartsApi from "../../services/carts";
 
 const initialState = {
   measuresPhoto: {},
@@ -69,14 +69,15 @@ const processReducer = (state = initialState, action) => {
   }
 };
 
-export const loadCarts = () => async (dispatch) => dispatch({ type: SET_CARTS, data: await dataApi.fetchCarts() });
+export const loadCarts = () => async (dispatch) => dispatch({ type: SET_CARTS, data: await cartsApi.fetchCarts() });
 export const loadCart = (id) => async (dispatch) => {
   dispatch({ type: SET_CART_DETAILS });
-  id && dispatch({ type: SET_CART_DETAILS, data: await dataApi.fetchCart(id) });
+  id && dispatch({ type: SET_CART_DETAILS, data: await cartsApi.fetchCart(id) });
 };
 
 export const addMeasure = (data) => ({ type: ADD_MEASURE, data });
-export const loadPhoto = (cartId, measureId) => async (dispatch) =>
-  dispatch({ type: SET_MEASURE_PHOTO, measureId, data: await dataApi.fetchPhoto(cartId, measureId) });
+export const loadPhoto = (cartId, measureId) => async (dispatch, getState) =>
+  !(getState().process.measuresPhoto && getState().process.measuresPhoto[measureId]) &&
+  dispatch({ type: SET_MEASURE_PHOTO, measureId, data: await cartsApi.fetchPhoto(cartId, measureId) });
 
 export default processReducer;

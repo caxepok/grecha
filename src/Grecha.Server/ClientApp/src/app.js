@@ -4,6 +4,7 @@ import { Provider } from "react-redux";
 import { BrowserRouter as Router, Route, Switch, Redirect } from "react-router-dom";
 import { ThemeProvider } from "styled-components";
 import processReducer from "./pages/process/process.reducer";
+import analyticsReducer from "./pages/analytics/analytics.reducer";
 import thunk from "redux-thunk";
 import theme from "./theme";
 import { Layout, Navigation } from "./components";
@@ -16,6 +17,7 @@ function App() {
   const store = createStore(
     combineReducers({
       process: processReducer,
+      analytics: analyticsReducer,
     }),
     composeEnhancers(applyMiddleware(thunk)),
   );

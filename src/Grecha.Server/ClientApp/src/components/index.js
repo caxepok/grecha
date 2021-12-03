@@ -8,3 +8,4 @@ export * from "./popup";
 export * from "./navigation";
 export * from "./nav-list";
 export * from "./button";
+export * from "./tabs";

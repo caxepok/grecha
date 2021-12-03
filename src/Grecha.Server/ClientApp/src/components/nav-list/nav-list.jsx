@@ -1,5 +1,5 @@
 import React, { useMemo } from "react";
-import { useRouteMatch } from "react-router";
+import { Redirect, useRouteMatch } from "react-router";
 import { createPathURL } from "./nav-list.helpers";
 import styled, { css } from "styled-components";
 import { Link as RouterLink } from "react-router-dom";
@@ -7,15 +7,21 @@ import { Link as RouterLink } from "react-router-dom";
 export const NavList = React.memo((props) => {
   const { items, title } = props;
 
+  const match = useRouteMatch();
+  if (items && items.length && !match.params.id) {
+    return <Redirect to={createPathURL(match, { id: items[0].id })} />;
+  }
+
   return (
     <Wrapper>
       {title && <Title>{title}</Title>}
       <List>
-        {items.map((item) => (
-          <Link key={item.id} id={item.id}>
-            {item.name}
-          </Link>
-        ))}
+        {items &&
+          items.map((item) => (
+            <Link key={item.id} id={item.id}>
+              {item.name}
+            </Link>
+          ))}
       </List>
     </Wrapper>
   );

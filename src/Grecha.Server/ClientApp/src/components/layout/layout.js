@@ -19,7 +19,7 @@ const Card = React.memo(
 );
 
 const Page = React.memo((props) => {
-  const { title, children, backTo } = props;
+  const { title, children, backTo, tabs } = props;
   return (
     <PageMarkup.Wrapper>
       {backTo && (
@@ -27,7 +27,10 @@ const Page = React.memo((props) => {
           <BackArrow />
         </PageMarkup.BackButton>
       )}
-      {title && <PageMarkup.Title>{title}</PageMarkup.Title>}
+      <PageMarkup.Header>
+        {title && <PageMarkup.Title>{title}</PageMarkup.Title>}
+        {tabs}
+      </PageMarkup.Header>
       <PageMarkup.Content>{children}</PageMarkup.Content>
     </PageMarkup.Wrapper>
   );

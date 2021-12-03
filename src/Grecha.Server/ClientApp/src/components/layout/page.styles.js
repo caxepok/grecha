@@ -23,6 +23,11 @@ export const Title = styled.h2`
   color: ${(p) => p.theme.colors.primary};
 `;
 
+export const Header = styled.div`
+  display: flex;
+  justify-content: space-between;
+`;
+
 export const Content = styled.div`
   flex-basis: 100%;
   display: flex;
