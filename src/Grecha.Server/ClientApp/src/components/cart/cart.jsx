@@ -23,7 +23,7 @@ export const Cart = React.memo((props) => {
       {supplier && <Markup.Supplier>{supplier.name}</Markup.Supplier>}
       <Markup.Number>{number}</Markup.Number>
       <Markup.Quality>{quality}%</Markup.Quality>
-      <Markup.Weight>{weight}</Markup.Weight>
+      {weight && <Markup.Weight>{weight}т</Markup.Weight>}
     </Markup.Wrapper>
   );
 });
