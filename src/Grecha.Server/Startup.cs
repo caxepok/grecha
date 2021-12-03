@@ -29,13 +29,16 @@ namespace grechaserver
 
         public void ConfigureServices(IServiceCollection services)
         {
+            // settings
             services.Configure<AppSettings>(_configuration.GetSection(nameof(AppSettings)));
-
+            // database
             services.AddDbContext<GrechaDBContext>(options =>
                 options.UseNpgsql(_configuration.GetConnectionString(nameof(GrechaDBContext))));
-
-            services.AddTransient<IImageService, ImageService>();
-
+            // app services
+            services.AddTransient<IQualityMeasureService, ImageService>();
+            services.AddTransient<IWeightsIntegrationService, WeightsIntegrationService>();
+            services.AddHostedService<SimulationService>();
+            // asp.net 
             services.AddControllersWithViews(options =>
             {
                 options.InputFormatters.Insert(0, new BinaryInputFormatter());
@@ -48,7 +51,6 @@ namespace grechaserver
                 setupAction.SwaggerDoc("v1", new OpenApiInfo { Title = "Grecha API", Version = "v1" });
             });
             // signalr
-            services.AddSingleton<IChannelWriterService<MeasureInfo>, ChannelWriterService<MeasureInfo>>();
             services.AddSignalR(options =>
             {
                 options.EnableDetailedErrors = true;
@@ -56,10 +58,7 @@ namespace grechaserver
             {
                 options.SerializerOptions.WithResolver(MessagePack.Resolvers.StandardResolver.Instance);
             }).AddJsonProtocol();
-
-            services.AddHostedService<SimulationService>();
-
-            // In production, the React files will be served from this directory
+            // react files will be served from this directory
             services.AddSpaStaticFiles(configuration =>
             {
                 configuration.RootPath = "ClientApp/build";
@@ -75,6 +74,7 @@ namespace grechaserver
                 dbcontext.Database.Migrate();
             }
 
+            // configure http pipeline
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -111,7 +111,7 @@ namespace grechaserver
                 endpoints.MapHub<ClientHub>("/hub");
             });
             app.UseMiddleware(typeof(ErrorHandlingMiddleware));
-
+            // spa
             app.UseSpa(spa =>
             {
                 spa.Options.SourcePath = "ClientApp";

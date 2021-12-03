@@ -3,9 +3,9 @@
 namespace grechaserver.Services.Interfaces
 {
     /// <summary>
-    /// Интерфейс сервиса аналитики
+    /// Интерфейс сервиса оценки качества сырья
     /// </summary>
-    public interface IImageService
+    public interface IQualityMeasureService
     {
         /// <summary>
         /// Обработчик изображений с камер
@@ -13,7 +13,7 @@ namespace grechaserver.Services.Interfaces
         /// <param name="side">сторона камеры</param>
         /// <param name="image">изображение</param>
         /// <returns>результат обработки</returns>
-        Task ProcessImage(string side, byte[] image);
+        Task ProcessImage(int line, string side, byte[] image);
         /// <summary>
         /// Сохраняет изображение в хранилище
         /// </summary>
@@ -28,12 +28,12 @@ namespace grechaserver.Services.Interfaces
         /// <param name="cartId">идентификатор вагона</param>
         /// <param name="measureId">идентификатор измерения</param>
         /// <param name="side">место установки камеры</param>
-        /// <returns></returns>
+        /// <returns>изображение</returns>
         Task<byte[]> GetShotAsync(long cartId, long measureId, string side);
         /// <summary>
         /// Считает уровень количества в зависимости от качества
         /// </summary>
-        /// <param name="quality">качества</param>
+        /// <param name="quality">качество из модуля оценки качества сырья</param>
         int CalculateQualityLevel(int quality);
     }
 }

@@ -16,14 +16,14 @@ using System.Threading.Tasks;
 
 namespace grechaserver.Services
 {
-    /// <inheritdoc cref="IImageService"/>
-    public class ImageService : IImageService
+    /// <inheritdoc cref="IQualityMeasureService"/>
+    public class ImageService : IQualityMeasureService
     {
         private readonly ILogger _logger;
         private readonly AppSettings _appSettings;
         private readonly GrechaDBContext _grechaDBContext;
-        private readonly IChannelWriterService<MeasureInfo> _channelWriterService;
         private readonly IHubContext<ClientHub> _clientHub;
+        private readonly IWeightsIntegrationService _weightsIntegrationService;
 
         /// <summary>
         /// последнее изображение сверху
@@ -34,17 +34,17 @@ namespace grechaserver.Services
         /// </summary>
         private static byte[] SideImage;
 
-        public ImageService(ILogger<ImageService> logger, IOptions<AppSettings> options, IChannelWriterService<MeasureInfo> channelWriterService,
-            IHubContext<ClientHub> clientHub, GrechaDBContext grechaDBContext)
+        public ImageService(ILogger<ImageService> logger, IOptions<AppSettings> options,
+            IHubContext<ClientHub> clientHub, IWeightsIntegrationService weightsIntegrationService, GrechaDBContext grechaDBContext)
         {
             _logger = logger;
             _grechaDBContext = grechaDBContext;
-            _channelWriterService = channelWriterService;
             _appSettings = options.Value;
             _clientHub = clientHub;
+            _weightsIntegrationService = weightsIntegrationService;
         }
 
-        public async Task ProcessImage(string side, byte[] image)
+        public async Task ProcessImage(int line, string side, byte[] image)
         {
             // нам нужно дождаться пока придут изображения с обоих камер
             // чтобы рассматривать их как один цельный снимок
@@ -70,6 +70,7 @@ namespace grechaserver.Services
 
                 try
                 {
+                    int weight = _weightsIntegrationService.MeasureWeight(line);
                     int quality = ProcessUpImage(upImage);
                     string cartNumber = ProcessSideImage(sideImage);
                     if (cartNumber == String.Empty)
@@ -78,9 +79,9 @@ namespace grechaserver.Services
                     var cart = _grechaDBContext.Carts.Include(_ => _.Supplier).SingleOrDefault(_ => _.Number == cartNumber);
                     if (cart == null)
                     {
-                        // новый вагон, сохраним его
-                        // предполагаем что у нас вагон на второй линии, и поставщик номер 1 (т.к. пока нет каталога поставщиков)
-                        cart = new Cart() { Number = cartNumber, Line = 2, SupplierId = 1 };    
+                        // прибыл новый вагон, сохраним его
+                        // хардкодим поставщика номер 4 (т.к. пока нет каталога поставщиков-вагонов)
+                        cart = new Cart() { Number = cartNumber, Line = line, SupplierId = 4 };    
                         _grechaDBContext.Add(cart);
                         await _grechaDBContext.SaveChangesAsync();
                     }
@@ -95,14 +96,13 @@ namespace grechaserver.Services
                     
                     // шлём уведоление клиентам (фронт + планшет)
                     var measureInfo = new MeasureInfo() { CartNumber = cartNumber, Quality = quality, CartId = cart.Id, LineNumber = cart.Line, 
-                        QualityLevel = cart.QualityLevel, MeasureId = measure.Id, Weight = 120, SupplierName = cart.Supplier.Name };
+                        QualityLevel = cart.QualityLevel, MeasureId = measure.Id, Weight = weight, SupplierName = cart.Supplier.Name };
 
-                    _channelWriterService.WriteToChannel(measureInfo);
                     await _clientHub.Clients.All.SendAsync("Measured", measureInfo);
                 }
                 catch (Exception ex)
                 {
-                    _logger.LogWarning(ex, "Failed to process images");
+                    _logger.LogWarning(ex, "Failed to process cart quality check");
                 }
                 finally
                 {
