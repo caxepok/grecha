@@ -71,8 +71,8 @@ namespace grechaserver.Services
                 try
                 {
                     int weight = _weightsIntegrationService.MeasureWeight(line);
-                    int quality = ProcessUpImage(upImage);
-                    string cartNumber = ProcessSideImage(sideImage);
+                    (int quality, byte[] upImageData) = ProcessUpImage(upImage);
+                    (string cartNumber, byte[] sideImageData) = ProcessSideImage(sideImage);
                     if (cartNumber == String.Empty)
                         return;
 
@@ -84,6 +84,7 @@ namespace grechaserver.Services
                         cart = new Cart() { Number = cartNumber, Line = line, SupplierId = 4 };    
                         _grechaDBContext.Add(cart);
                         await _grechaDBContext.SaveChangesAsync();
+                        cart.Supplier = _grechaDBContext.Suppliers.SingleOrDefault(_ => _.Id == 4);
                     }
                     // сохраняем инфу об измерении
                     Measure measure = new Measure() { CartId = cart.Id, Quality = quality, Timestamp = utc };
@@ -92,11 +93,13 @@ namespace grechaserver.Services
                     _grechaDBContext.Add(measure);
                     await _grechaDBContext.SaveChangesAsync();
                     // ... и изображение на будущее
-                    await StoreShotsAsync(cart.Id, measure.Id, upImage, sideImage);
                     
                     // шлём уведоление клиентам (фронт + планшет)
                     var measureInfo = new MeasureInfo() { CartNumber = cartNumber, Quality = quality, CartId = cart.Id, LineNumber = cart.Line, 
                         QualityLevel = cart.QualityLevel, MeasureId = measure.Id, Weight = weight, SupplierName = cart.Supplier.Name };
+
+                    // save intermediate images
+                    await StoreShotsAsync(cart.Id, measure.Id, upImageData, sideImageData);
 
                     await _clientHub.Clients.All.SendAsync("Measured", measureInfo);
                 }
@@ -149,14 +152,14 @@ namespace grechaserver.Services
         /// Обработчик изображений с камеры сбоку
         /// </summary>
         /// <param name="image">изображение</param>
-        private string ProcessSideImage(byte[] image) =>
+        private (string,byte[]) ProcessSideImage(byte[] image) =>
             NumberRecognition.Execute(image);
 
         /// <summary>
         /// Обработчик изображений сбоку
         /// </summary>
         /// <param name="image">изображение</param>
-        private int ProcessUpImage(byte[] image) =>
+        private (int, byte[]) ProcessUpImage(byte[] image) =>
             QualityCheck.Execute(image);
 
     }

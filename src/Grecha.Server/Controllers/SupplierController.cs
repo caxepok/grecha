@@ -26,6 +26,15 @@ namespace Grecha.Server.Controllers
         /// <summary>
         /// Возвращает вагоны поставщика с данными оценки качества
         /// </summary>
+        [HttpGet("")]
+        public async Task<IActionResult> GetSuppliers()
+        {
+            return Ok(_grechaDBContext.Suppliers);
+        }
+
+        /// <summary>
+        /// Возвращает вагоны поставщика с данными оценки качества
+        /// </summary>
         [HttpGet("{id}/carts")]
         public async Task<IActionResult> GetSupplierInfo(long id)
         {

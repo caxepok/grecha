@@ -20,7 +20,7 @@ namespace Grecha.OpenCV
         /// </summary>
         /// <param name="data">изображение</param>
         /// <returns>качественная оценка сырья</returns>
-        public static int Execute(byte[] data)
+        public static (int, byte[]) Execute(byte[] data)
         {
             Mat source = Mat.FromImageData(data);
             // кропнем центр картинки - там "вагон"
@@ -37,10 +37,9 @@ namespace Grecha.OpenCV
             Cv2.CvtColor(blurred, hsv, ColorConversionCodes.RGB2HSV);
             Cv2.Split(hsv, out var saturation);
             Mat gray = saturation[2];
-
             // выделим контуры
             Mat thresh = new();
-            Cv2.AdaptiveThreshold(gray, thresh, 256, AdaptiveThresholdTypes.GaussianC, ThresholdTypes.BinaryInv, 19, 1);
+            Cv2.AdaptiveThreshold(gray, thresh, 256, AdaptiveThresholdTypes.GaussianC, ThresholdTypes.BinaryInv, 51, 1);
 
             // самый большой прямоугольник - наш "вагон"
             var contours = Cv2.FindContoursAsArray(thresh, RetrievalModes.List, ContourApproximationModes.ApproxSimple);
@@ -67,13 +66,14 @@ namespace Grecha.OpenCV
             // это наш коробок, ресайзнем к константному размеру (310х430)
             Mat boxColor = source.SubMat(maxRect.Value).Clone();
             Mat boxHsv = hsv.SubMat(maxRect.Value).Clone();
+            Mat boxGray = gray.SubMat(maxRect.Value).Clone();
             SaveImage(boxHsv, "hsv");
             SaveImage(boxColor, "color");
 
             // немного уменьшим границы чтобы в анализ не попали стенки "вагона"
             Mat resized = new Mat();
             Cv2.Resize(boxHsv, resized, size);
-            //resized = resized.SubMat(20, size.Width - 20, 20, size.Height - 20);
+            resized = resized.SubMat(20, size.Height - 20, 20, size.Width - 20);
 
             // для точности оценим качество по двум параметрам:
             // 1. чёрный\белый
@@ -81,7 +81,8 @@ namespace Grecha.OpenCV
             // 2. один канал HSV
             // выделение синего цвета
             Mat mask = resized.ExtractChannel(2);    // синий канал
-            Cv2.Threshold(mask, mask, 128, 256, ThresholdTypes.Binary);
+            Cv2.Threshold(mask, mask, 100, 256, ThresholdTypes.Binary);
+            SaveImage(mask, "gray");
 
             // почистим от небольших мусорных областей
             var ones = Mat.Ones(3, 3, (MatType)MatType.CV_8U).ToMat();
@@ -89,20 +90,22 @@ namespace Grecha.OpenCV
             Mat dilated = new Mat();
             Cv2.Erode(mask, eroded, ones, iterations: 2);
             Cv2.Dilate(eroded, dilated, ones, iterations: 2);
-            SaveImage(eroded, "result");
+            SaveImage(dilated, "result");
 
             // считаем количество белых\чёрных пикселей
-            int total = size.Width * size.Height;
+            int total = dilated.Rows * dilated.Cols;
             int nonZero = Cv2.CountNonZero(dilated);
 
-            int nonBlack = total - nonZero;
-            
-            // вся картинка белая :) наверняка это ошибка, но считаем что сырьё 100% чистоты
-            if (total == nonBlack)
-                return 100;
+            int black = total - nonZero;
+            byte[] imageData = boxGray.ToBytes(".jpg");
+
+            // вся картинка белая :) наверняка это ошибка, но считаем что сырьё 100% чистоты и не делим на ноль, не схлопываем вселенную
+            if (black == 0)
+                return (100, imageData);
 
             // чистота сырья - отношение белых пикселей к чёрным
-            return 100 - (total / total - nonBlack);
+            int quality = 100 - (int)((float)black / total * 100);
+            return (quality, imageData);
         }
 
         /// <summary>

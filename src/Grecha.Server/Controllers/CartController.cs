@@ -43,7 +43,7 @@ namespace grechaserver.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> GetCart(long id)
         {
-            return Ok(_grechaDBContext.Carts
+            return Ok(await _grechaDBContext.Carts
                 .Include(_ => _.Measures)
                 .Include(_ => _.Supplier)
                 .SingleOrDefaultAsync(_ => _.Id == id));

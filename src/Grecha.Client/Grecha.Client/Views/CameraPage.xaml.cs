@@ -30,7 +30,7 @@ namespace Grecha.Client.Views
             {
                 try
                 {
-                    await Task.Delay(3000);
+                    await Task.Delay(5000);
                     if(ProcessPhotos)
                         cameraView.Shutter();
                 }

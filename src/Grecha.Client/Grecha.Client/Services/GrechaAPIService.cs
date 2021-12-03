@@ -17,7 +17,7 @@ namespace Grecha.Client.Services
         /// <summary>
         /// Место закрепления камеры
         /// </summary>
-        private readonly static string CameraSide = "up";
+        private readonly static string CameraSide = "side";
 
         private readonly HttpClient httpClient = new HttpClient();
 
