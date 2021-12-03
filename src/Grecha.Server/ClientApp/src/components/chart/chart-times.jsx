@@ -35,8 +35,6 @@ export const ChartTimes = React.memo((props) => {
     }
   }, [blockRef, count]);
 
-  console.log(params);
-
   return (
     <Markup.Dates ref={blockRef}>
       {params &&

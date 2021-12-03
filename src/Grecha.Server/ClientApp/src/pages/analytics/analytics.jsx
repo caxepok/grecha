@@ -14,7 +14,7 @@ export const Analytics = React.memo(() => {
 
   const tabs = useMemo(
     () => [
-      { id: "suppliers", label: "По поставщикам" },
+      { id: "suppliers", label: "Поставщики" },
       { id: "quality", label: "Сырье" },
     ],
     [],
@@ -31,8 +31,8 @@ export const Analytics = React.memo(() => {
       <Switch>
         <Route path={`/analytics/${tabs[0].id}/:id?`}>
           <Layout.Row sizes={["300px", 1]}>
-            <Layout.Card>
-              <NavList title="Поставщики" items={suppliers} />
+            <Layout.Card title="Поставщики">
+              <NavList items={suppliers} />
             </Layout.Card>
             <Layout.Card>
               <Layout.Column sizes={["auto", 1]}>
@@ -43,7 +43,7 @@ export const Analytics = React.memo(() => {
         </Route>
         <Route path={`/analytics/${tabs[1].id}`}>
           <Layout.Row>
-            <Layout.Card>
+            <Layout.Card title="Чистота сырья">
               <ChartLine values={analyticsChartData} />
             </Layout.Card>
           </Layout.Row>

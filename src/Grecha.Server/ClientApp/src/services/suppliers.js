@@ -1,7 +1,6 @@
 import { API_URL } from "../consts";
 
 export const fetchSuppliers = async () => {
-  console.log("fetch");
   try {
     const res = await fetch(`${API_URL}/supplier`);
     if (res.status === 200) {
