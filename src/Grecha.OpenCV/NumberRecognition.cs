@@ -24,7 +24,7 @@ namespace Grecha.OpenCV
             Cv2.CvtColor(source, gray, ColorConversionCodes.BGR2GRAY);
             SaveImage(gray, "gray");
 
-            // бинаризруем
+            // бинаризуем
             Mat canny = new Mat();
             Cv2.Canny(gray, canny, 48, 256);
 
@@ -40,7 +40,7 @@ namespace Grecha.OpenCV
             Mat rects = source.Clone();
             int i = 0;
             string text = String.Empty;
-            byte[] outImage = null;
+            byte[]? outImage = null;
             foreach (var contour in contours)
             {
                 var rect = Cv2.BoundingRect(contour);

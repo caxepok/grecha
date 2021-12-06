@@ -63,7 +63,7 @@ namespace Grecha.OpenCV
             Cv2.Rectangle(blurred, maxRect.Value, Scalar.Yellow, 2);
             SaveImage(blurred, "rectangles");
 
-            // это наш коробок, ресайзнем к константному размеру (310х430)
+            // это наш коробок, ресайзнем к константному размеру (450x330)
             Mat boxColor = source.SubMat(maxRect.Value).Clone();
             Mat boxHsv = hsv.SubMat(maxRect.Value).Clone();
             Mat boxGray = gray.SubMat(maxRect.Value).Clone();
@@ -75,11 +75,7 @@ namespace Grecha.OpenCV
             Cv2.Resize(boxHsv, resized, size);
             resized = resized.SubMat(20, size.Height - 20, 20, size.Width - 20);
 
-            // для точности оценим качество по двум параметрам:
-            // 1. чёрный\белый
-
-            // 2. один канал HSV
-            // выделение синего цвета
+            // выделяем синий канал
             Mat mask = resized.ExtractChannel(2);    // синий канал
             Cv2.Threshold(mask, mask, 100, 256, ThresholdTypes.Binary);
             SaveImage(mask, "gray");
